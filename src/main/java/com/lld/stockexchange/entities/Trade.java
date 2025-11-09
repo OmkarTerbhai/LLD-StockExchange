@@ -1,10 +1,7 @@
 package com.lld.stockexchange.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "Trade")
@@ -12,6 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Trade extends AbstractBaseEntity {
 
     @Id
@@ -31,4 +29,7 @@ public class Trade extends AbstractBaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(referencedColumnName = "stockId")
     private Stock stock;
+
+    @Column
+    private int quantity;
 }
