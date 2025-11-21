@@ -2,6 +2,7 @@ package com.lld.stockexchange.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.*;
 
 @Entity
 @Table
@@ -16,7 +17,7 @@ public class Order extends AbstractBaseEntity {
     private String orderId;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(referencedColumnName = "stockId")
+    @JoinColumn(name = "stockId")
     private Stock stock;
 
     @Column(name = "price")
@@ -39,4 +40,10 @@ public class Order extends AbstractBaseEntity {
     @Column
     @Enumerated(value = EnumType.STRING)
     private OrderType orderType;
+
+    @OneToMany(mappedBy="buyOrder")
+    private Set<Trade> buyTrades;
+
+    @OneToMany(mappedBy="sellOrder")
+    private Set<Trade> sellTrades;
 }

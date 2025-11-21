@@ -6,9 +6,9 @@ import lombok.Setter;
 
 import java.util.Date;
 
-@Entity
 @Getter
 @Setter
+@MappedSuperclass
 public class AbstractBaseEntity {
 
     @Column

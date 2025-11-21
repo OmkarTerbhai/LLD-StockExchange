@@ -7,8 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
+import lombok.*;
 
-import java.util.Set;
+
+import java.util.*;
 import java.util.UUID;
 
 @Entity
@@ -28,6 +30,6 @@ public class Stock extends AbstractBaseEntity {
     @Column
     private String companyName;
 
-    @OneToMany
+    @OneToMany(mappedBy="stock")
     private Set<Order> orders;
 }

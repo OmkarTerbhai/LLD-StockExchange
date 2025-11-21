@@ -2,6 +2,7 @@ package com.lld.stockexchange.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.*;
 
 @Entity
 @Table(name = "Trade")
@@ -16,18 +17,19 @@ public class Trade extends AbstractBaseEntity {
     private String tradeId;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(referencedColumnName = "sellOrderId")
+    @JoinColumn(name = "buyOrderId", referencedColumnName = "orderId")
     private Order buyOrder;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(referencedColumnName = "sellOrderId")
+    @JoinColumn(name = "sellOrderId", referencedColumnName = "orderId")
     private Order sellOrder;
+
 
     @Column
     private double price;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(referencedColumnName = "stockId")
+    @JoinColumn(name = "stockId")
     private Stock stock;
 
     @Column
