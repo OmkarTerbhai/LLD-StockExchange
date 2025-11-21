@@ -17,13 +17,12 @@ public class Trade extends AbstractBaseEntity {
     private String tradeId;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "buyOrderId", referencedColumnName = "orderId")
+    @JoinColumn(name = "buyOrderId")
     private Order buyOrder;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sellOrderId", referencedColumnName = "orderId")
+    @JoinColumn(name = "sellOrderId")
     private Order sellOrder;
-
 
     @Column
     private double price;

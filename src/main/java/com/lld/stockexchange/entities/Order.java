@@ -5,7 +5,7 @@ import lombok.*;
 import java.util.*;
 
 @Entity
-@Table
+@Table(name= "Orders")
 @Getter
 @Setter
 @NoArgsConstructor
