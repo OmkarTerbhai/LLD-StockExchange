@@ -112,4 +112,8 @@ public class OrderServiceImpl implements OrderService {
     private static ReadWriteLock getSymbolLock(String stockSymbol) {
         return symbolLock.computeIfAbsent(stockSymbol, k -> new ReentrantReadWriteLock());
     }
+
+    public List<Order> getOrdersByStockSymbol(String symbol) {
+        return orderBook.getOrDefault(symbol, List.of());
+    }
 }

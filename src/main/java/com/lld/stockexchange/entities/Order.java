@@ -32,7 +32,6 @@ public class Order extends AbstractBaseEntity {
     @Column
     private int remainingQuantity;
 
-
     @Column
     @Enumerated(value = EnumType.STRING)
     private OrderStatus orderStatus;
