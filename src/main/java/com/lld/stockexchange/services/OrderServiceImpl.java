@@ -6,6 +6,7 @@ import com.lld.stockexchange.entities.OrderStatus;
 import com.lld.stockexchange.entities.OrderType;
 import com.lld.stockexchange.entities.Stock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,14 +14,12 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+@Service
 public class OrderServiceImpl implements OrderService {
 
     private static ConcurrentMap<String, List<Order>> orderBook = new ConcurrentHashMap<>();
 
     private static ConcurrentMap<String, ReadWriteLock> symbolLock = new ConcurrentHashMap<>();
-
-    @Autowired
-    private StockService stockService;
 
     /**
      * Method to create order
@@ -30,14 +29,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Optional<Order> createOrder(CreateOrderDto dto) {
 
-        Stock st = stockService.getStockBySymbol(dto.stockSymbol());
         ReadWriteLock lock = getSymbolLock(dto.stockSymbol());
 
-        lock.writeLock();
+        lock.writeLock().lock();
 
         try {
             Order newOrder = Order.builder()
-                    .stock(st)
+                    .orderId(UUID.randomUUID().toString())
+                    .stock(dto.stockSymbol())
                     .orderStatus(OrderStatus.ACCEPTED)
                     .orderType(OrderType.getOrder(dto.orderType()))
                     .quantity(dto.quantity())
@@ -60,10 +59,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Optional<Order> updateOrder(CreateOrderDto dto, String orderId) {
 
-        Stock st = stockService.getStockBySymbol(dto.stockSymbol());
         ReadWriteLock lock = getSymbolLock(dto.stockSymbol());
 
-        lock.writeLock();
+        lock.writeLock().lock();
 
         try {
             ListIterator<Order> orders = orderBook.getOrDefault(dto.stockSymbol(), new ArrayList<>()).listIterator();

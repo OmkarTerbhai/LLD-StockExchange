@@ -16,9 +16,9 @@ public class Order extends AbstractBaseEntity {
     @Id
     private String orderId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "stockId")
-    private Stock stock;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "stockId")
+    private String stock;
 
     @Column(name = "price")
     private double price;

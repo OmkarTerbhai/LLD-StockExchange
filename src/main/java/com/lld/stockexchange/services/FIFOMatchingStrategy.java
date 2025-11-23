@@ -4,11 +4,13 @@ import com.lld.stockexchange.entities.Order;
 import com.lld.stockexchange.entities.OrderStatus;
 import com.lld.stockexchange.entities.OrderType;
 import com.lld.stockexchange.entities.Trade;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Service
 public class FIFOMatchingStrategy implements OrderMatchingStrategy {
     @Override
     public List<Trade> getMatchingOrders(Order o, List<Order> existingOrders) {
@@ -24,7 +26,7 @@ public class FIFOMatchingStrategy implements OrderMatchingStrategy {
         List<Order> matchingOrders =  existingOrders.stream()
                 .filter(or -> OrderType.SELL.equals(or.getOrderType()))
                 .filter(order -> !OrderStatus.EXECUTED.equals(order.getOrderStatus()) && !OrderStatus.REJECTED.equals(order.getOrderStatus()))
-                .filter(order -> order.getStock().getStockId().equals(o.getStock().getStockId()))
+                .filter(order -> order.getStock().equals(o.getStock()))
                 .filter(order -> order.getPrice() <= o.getPrice())
                 .sorted(Comparator.comparing(Order::getPrice).thenComparing(Order::getCreatedDate))
                 .toList();
@@ -39,9 +41,14 @@ public class FIFOMatchingStrategy implements OrderMatchingStrategy {
 
             o.setFilledQuantity(quantity);
             o.setRemainingQuantity(o.getQuantity() - quantity);
+            o.setOrderStatus(OrderStatus.EXECUTED);
 
             m.setFilledQuantity(quantity);
             m.setRemainingQuantity(o.getQuantity() - quantity);
+            if(m.getRemainingQuantity() == 0)
+                m.setOrderStatus(OrderStatus.EXECUTED);
+            else
+                m.setOrderStatus(OrderStatus.PARTIALLY_EXECUTED);
 
             Trade trade = Trade.builder()
                     .buyOrder(m)
@@ -61,7 +68,7 @@ public class FIFOMatchingStrategy implements OrderMatchingStrategy {
         List<Order> matchingOrders = existingOrders.stream()
                 .filter(or -> OrderType.BUY.equals(or.getOrderType()))
                 .filter(order -> !OrderStatus.EXECUTED.equals(order.getOrderStatus()) && !OrderStatus.REJECTED.equals(order.getOrderStatus()))
-                .filter(order -> order.getStock().getStockId().equals(o.getStock().getStockId()))
+                .filter(order -> order.getStock().equals(o.getStock()))
                 .filter(order -> order.getPrice() >= o.getPrice())
                 .sorted(Comparator.comparing(Order::getPrice).thenComparing(Order::getCreatedDate))
                 .toList();

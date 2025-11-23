@@ -26,10 +26,10 @@ public class Trade extends AbstractBaseEntity {
 
     @Column
     private double price;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "stockId")
-    private Stock stock;
+//
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "stockId")
+    private String stock;
 
     @Column
     private int quantity;
